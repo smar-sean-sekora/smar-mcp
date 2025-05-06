@@ -24,6 +24,41 @@ const api = createSmartsheetDirectAPI();
 
 // Tool 1: Get Sheet
 server.tool(
+    "get_folder",
+    "Retrieves the current state of a folder, including it's contents which can be sheets, reports, or other folders",
+    {
+      folderId: z.string().describe("The ID of the folder to retrieve")
+    },
+    async ({ folderId}) => {
+      try {
+        console.error(`[Tool] Getting folder with ID: ${folderId}`);
+        const folder = await api.getFolder(folderId);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(folder, null, 2)
+            }
+          ]
+        };
+      } catch (error: any) {
+        console.error("[Error] in get_sheet:", error);
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Failed to get folder: ${error.message}`
+            }
+          ],
+          isError: true
+        };
+      }
+    }
+);
+
+// Tool 1: Get Sheet
+server.tool(
   "get_sheet",
   "Retrieves the current state of a sheet, including rows, columns, and cells",
   {

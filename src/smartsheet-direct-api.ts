@@ -106,7 +106,16 @@ export class SmartsheetDirectAPI {
     
     return formattedError;
   }
-  
+
+  /**
+   * Gets a folder by ID
+   * @param folderId Folder ID
+   * @returns Folder data
+   */
+  async getFolder(folderId: string): Promise<any> {
+    return this.request('GET', `/folders/${folderId}`);
+  }
+
   /**
    * Gets a sheet by ID
    * @param sheetId Sheet ID
