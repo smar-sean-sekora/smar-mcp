@@ -108,6 +108,15 @@ export class SmartsheetDirectAPI {
   }
 
   /**
+   * Gets a workspace by ID
+   * @param workspaceId workspace ID
+   * @returns workspace data
+   */
+  async getWorkspace(workspaceId: string): Promise<any> {
+    return this.request('GET', `/workspaces/${workspaceId}`);
+  }
+
+  /**
    * Gets a folder by ID
    * @param folderId Folder ID
    * @returns Folder data

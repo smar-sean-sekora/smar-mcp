@@ -22,7 +22,42 @@ const server = new McpServer({
 // Initialize the direct API client
 const api = createSmartsheetDirectAPI();
 
-// Tool 1: Get Sheet
+// Tool: Get Workspace
+server.tool(
+    "get_workspace",
+    "Retrieves the current state of a Workspace, including it's contents which can be sheets, reports, or other folders",
+    {
+      workspaceId: z.string().describe("The ID of the workspace to retrieve")
+    },
+    async ({ workspaceId}) => {
+      try {
+        console.error(`[Tool] Getting workspace with ID: ${workspaceId}`);
+        const workspace = await api.getWorkspace(workspaceId);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(workspace, null, 2)
+            }
+          ]
+        };
+      } catch (error: any) {
+        console.error("[Error] in get_workspace:", error);
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Failed to get get_workspace: ${error.message}`
+            }
+          ],
+          isError: true
+        };
+      }
+    }
+);
+
+// Tool: Get Folder
 server.tool(
     "get_folder",
     "Retrieves the current state of a folder, including it's contents which can be sheets, reports, or other folders",
@@ -43,12 +78,12 @@ server.tool(
           ]
         };
       } catch (error: any) {
-        console.error("[Error] in get_sheet:", error);
+        console.error("[Error] in get_folder:", error);
         return {
           content: [
             {
               type: "text",
-              text: `Failed to get folder: ${error.message}`
+              text: `Failed to get_folder: ${error.message}`
             }
           ],
           isError: true
