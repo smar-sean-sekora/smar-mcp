@@ -117,6 +117,47 @@ export class SmartsheetDirectAPI {
   }
 
   /**
+   * Creates a workspace
+   * @param workspaceName Name of the folder to workspace
+   * @returns Created folder data
+   */
+  async createWorkspace(workspaceName: string): Promise<any> {
+    const data = {
+      name: workspaceName
+    };
+
+    return this.request('POST', `/workspaces`, data);
+  }
+
+  /**
+   * Creates a folder in a workspace
+   * @param workspaceId Workspace ID
+   * @param folderName Name of the folder to create
+   * @returns Created folder data
+   */
+  async createWorkspaceFolder(workspaceId: string, folderName: string): Promise<any> {
+    const data = {
+      name: folderName
+    };
+
+    return this.request('POST', `/workspaces/${workspaceId}/folders`, data);
+  }
+
+  /**
+   * Creates a new folder in a folder
+   * @param folderId folder ID
+   * @param folderName Name of the folder to create
+   * @returns Created folder data
+   */
+  async createFolder(folderId: string, folderName: string): Promise<any> {
+    const data = {
+      name: folderName
+    };
+
+    return this.request('POST', `/folders/${folderId}/folders`, data);
+  }
+
+  /**
    * Gets a folder by ID
    * @param folderId Folder ID
    * @returns Folder data
@@ -283,20 +324,6 @@ export class SmartsheetDirectAPI {
    */
   async listWorkspaceFolders(workspaceId: string): Promise<any> {
     return this.request('GET', `/workspaces/${workspaceId}/folders`);
-  }
-
-  /**
-   * Creates a folder in a workspace
-   * @param workspaceId Workspace ID
-   * @param folderName Name of the folder to create
-   * @returns Created folder data
-   */
-  async createWorkspaceFolder(workspaceId: string, folderName: string): Promise<any> {
-    const data = {
-      name: folderName
-    };
-    
-    return this.request('POST', `/workspaces/${workspaceId}/folders`, data);
   }
   
   /**

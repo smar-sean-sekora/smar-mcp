@@ -57,6 +57,41 @@ server.tool(
     }
 );
 
+// Tool: Create workspace
+server.tool(
+    "create_workspace",
+    "Creates a new workspace",
+    {
+      workspaceName: z.string().describe("The name of the new workspace")
+    },
+    async ({ workspaceName }) => {
+      try {
+        console.error(`[Tool] Creating workspace: ${workspaceName}`);
+        const workspace = await api.createWorkspace(workspaceName);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(workspace, null, 2)
+            }
+          ]
+        };
+      } catch (error: any) {
+        console.error("[Error] in create_workspace:", error);
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Failed to create_workspace: ${error.message}`
+            }
+          ],
+          isError: true
+        };
+      }
+    }
+);
+
 // Tool: Get Folder
 server.tool(
     "get_folder",
@@ -84,6 +119,78 @@ server.tool(
             {
               type: "text",
               text: `Failed to get_folder: ${error.message}`
+            }
+          ],
+          isError: true
+        };
+      }
+    }
+);
+
+// Tool: Create Folder in folder
+server.tool(
+    "create_folder",
+    "Creates a new folder in a folder",
+    {
+      folderId: z.string().describe("The ID of the folder to create the folder in"),
+      folderName: z.string().describe("The name of the new folder")
+    },
+    async ({ folderId, folderName }) => {
+      try {
+        console.error(`[Tool] Creating folder in workspace with ID: ${folderId}`);
+        const folder = await api.createFolder(folderId, folderName);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(folder, null, 2)
+            }
+          ]
+        };
+      } catch (error: any) {
+        console.error("[Error] in create_folder:", error);
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Failed to create_folder: ${error.message}`
+            }
+          ],
+          isError: true
+        };
+      }
+    }
+);
+
+// Tool: Create Folder in workspace
+server.tool(
+    "create_workspace_folder",
+    "Creates a new folder in a workspace",
+    {
+      workspaceId: z.string().describe("The ID of the workspace to create the folder in"),
+      folderName: z.string().describe("The name of the new folder")
+    },
+    async ({ workspaceId, folderName }) => {
+      try {
+        console.error(`[Tool] Creating folder in workspace with ID: ${workspaceId}`);
+        const folder = await api.createWorkspaceFolder(workspaceId, folderName);
+
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(folder, null, 2)
+            }
+          ]
+        };
+      } catch (error: any) {
+        console.error("[Error] in create_workspace_folder:", error);
+        return {
+          content: [
+            {
+              type: "text",
+              text: `Failed to create_workspace_folder: ${error.message}`
             }
           ],
           isError: true
